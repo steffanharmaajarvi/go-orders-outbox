@@ -18,11 +18,6 @@ A minimal event-driven microservice built in Go using the **Transactional Outbox
 
 --
 
-
-## [Roadmap](https://github.com/steffanharmaajarvi/go-orders-outbox/tree/main/docs/roadmap.md
-There is also a roadmap for this project
----
-
 ## 🚀 Stack
 
 - **Go 1.24+**
