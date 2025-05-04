@@ -1,0 +1,58 @@
+# Go build artifacts
+/bin/
+/build/
+/dist/
+/*.exe
+/*.out
+/*.test
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Go module cache
+/pkg/
+/vendor/
+
+# Go coverage & test files
+*.coverprofile
+*.test
+*.log
+
+# Editor directories and files
+.idea/
+.vscode/
+*.swp
+*.swo
+*.DS_Store
+
+# Logs and temp files
+*.log
+*.tmp
+*.bak
+
+# Env / secrets
+.env
+.env.*
+secrets.json
+config.yaml
+
+# Docker-related
+*.pid
+docker-compose.override.yml
+
+# Kafka logs (if any local volumes used)
+kafka-logs/
+redpanda-data/
+
+# Output directories
+outbox/
+data/
+tmp/
+node_modules/  # (если добавится UI)
+
+# Git
+*.orig
+
+# Ignore everything in Docker volume mounts
+volumes/
