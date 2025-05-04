@@ -1,6 +1,7 @@
 package setup
 
 import (
+	"github.com/gin-gonic/gin"
 	"orders.go/m/internal/infrastructure/config"
 	"orders.go/m/internal/infrastructure/database"
 )
@@ -8,6 +9,7 @@ import (
 type Container struct {
 	Config   config.Config
 	Database database.Database
+	Engine   *gin.Engine
 }
 
 func BuildContainer() (*Container, error) {
@@ -17,8 +19,11 @@ func BuildContainer() (*Container, error) {
 	// 2. Init storage (можно условно: postgres или dynamo)
 	databasePools := database.New(database.Postgres, cfg)
 
+	engine := gin.Default()
+
 	return &Container{
 		Config:   cfg,
 		Database: databasePools,
+		Engine:   engine,
 	}, nil
 }

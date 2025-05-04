@@ -36,6 +36,7 @@
 .env.*
 secrets.json
 config.yaml
+configs/.env.yml
 
 # Docker-related
 *.pid

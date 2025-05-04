@@ -28,26 +28,56 @@ services:
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
     ports:
-      - "8080:8080"
+      - "8085:8080"
     environment:
       - KAFKA_CLUSTERS_0_NAME=local
       - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=redpanda:9092
     depends_on:
       - redpanda
+  migrator:
+    build:
+      context: .
+      dockerfile: ./docker/migrator/Dockerfile
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: orders
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DSN: postgres://user:pass@postgres:5432/orders?sslmode=disable
+    depends_on:
+      - postgres
+    command: [ "./wait-and-migrate.sh" ]  # Подождать и прогнать миграции
+    volumes:
+      - ./migrations:/app/migrations
   app:
     build:
       context: .
-      dockerfile: ./docker/go/Dockerfile
-    command: sh -c "
-      migrate -path ./migrations -database $${DATABASE_URL} up &&
-      ./main"
+      dockerfile: ./docker/app/Dockerfile
     ports:
-      - "8081:8081"
+      - "8080:8080"
+    volumes:
+      - ./cmd:/app/cmd
+      - ./internal:/app/internal
+      - ./go.mod:/app/go.mod
+      - ./go.sum:/app/go.sum
+      - ./migrations:/app/migrations
+      - ./configs/.env.yml:/app/configs/.env.yml
     depends_on:
       - postgres
       - redpanda
     environment:
       - DATABASE_URL=postgres://user:pass@postgres:5432/orders?sslmode=disable
+      - KAFKA_BROKER=redpanda:9092
+  consumer:
+    build:
+      context: .
+      dockerfile: ./docker/consumer/Dockerfile
+    ports:
+      - "8082:8082"
+    depends_on:
+      - redpanda
+    environment:
       - KAFKA_BROKER=redpanda:9092
 
 volumes:

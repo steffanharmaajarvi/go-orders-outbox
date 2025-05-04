@@ -30,7 +30,6 @@ func (e ExternalConfig) GetInt(path string) int {
 }
 
 func New() *ExternalConfig {
-
 	// Get current working directory
 	wd, err := os.Getwd()
 	if err != nil {

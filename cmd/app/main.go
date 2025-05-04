@@ -1,14 +1,14 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"orders.go/m/internal/setup"
+)
 
 func main() {
-	router := gin.Default()
+	app := setup.New()
 
-	router.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
-	router.Run() // listen and serve on 0.0.0.0:8080
+	err := app.Run()
+	if err != nil {
+		panic(err)
+	}
 }
