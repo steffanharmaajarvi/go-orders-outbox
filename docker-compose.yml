@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   postgres:
     image: postgres:14
@@ -9,7 +8,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - ./docker/postgres/data/:/var/lib/postgresql/data/
 
   redpanda:
     image: redpandadata/redpanda:latest
@@ -37,8 +36,11 @@ services:
       - redpanda
   app:
     build:
-      context: docker/go/Dockerfile
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./docker/go/Dockerfile
+    command: sh -c "
+      migrate -path ./migrations -database $${DATABASE_URL} up &&
+      ./main"
     ports:
       - "8081:8081"
     depends_on:

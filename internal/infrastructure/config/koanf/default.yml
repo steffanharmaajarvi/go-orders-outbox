@@ -1,0 +1,17 @@
+http:
+  port: :8080
+  read_timeout: 5
+  write_timeout: 5
+  shutdown_timeout: 3
+
+kafka:
+  enabled: false
+  brokers: '127.0.0.1:9922'
+  topic: 'topic'
+  consumer_group: 'consumer_group'
+
+
+postgres:
+  pool_max: 2
+  conn_attempts: 10
+  connections:
