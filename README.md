@@ -16,6 +16,11 @@ A minimal event-driven microservice built in Go using the **Transactional Outbox
 - Separate containers for app, consumer, migrator
 - Docker Compose setup for local dev
 
+--
+
+
+## [Roadmap](https://github.com/steffanharmaajarvi/go-orders-outbox/tree/main/docs/roadmap.md
+There is also a roadmap for this project
 ---
 
 ## 🚀 Stack
