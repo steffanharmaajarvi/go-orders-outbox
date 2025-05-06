@@ -53,6 +53,8 @@ func (o *OutboxDispatcher) Execute() error {
 			for _, event := range events {
 				workerChan <- *event
 			}
+		default:
+			log.Warn().Msg("worker pool full, skipping for now")
 		case <-ctx.Done():
 			return ctx.Err()
 		}
