@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/rs/zerolog/log"
 	"github.com/volatiletech/null/v8"
-	"orders.go/m/internal/event"
+	"orders.go/m/internal/infrastructure/event"
 	"orders.go/m/internal/models"
 	"orders.go/m/internal/repository/outbox"
 	"time"

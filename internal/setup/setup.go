@@ -3,8 +3,8 @@ package setup
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"orders.go/m/internal/event/kafka"
 	"orders.go/m/internal/infrastructure/database"
+	"orders.go/m/internal/infrastructure/event/kafka"
 	"orders.go/m/internal/repository/orders"
 	"orders.go/m/internal/repository/outbox"
 	"orders.go/m/internal/routes"

@@ -11,7 +11,7 @@ import (
 	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/types"
 	"orders.go/m/internal/entities/outbox"
-	"orders.go/m/internal/event"
+	"orders.go/m/internal/infrastructure/event"
 	"orders.go/m/internal/models"
 	"orders.go/m/internal/repository/orders"
 	outbox2 "orders.go/m/internal/repository/outbox"
