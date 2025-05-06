@@ -11,6 +11,7 @@ import (
 	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/types"
 	"orders.go/m/internal/entities/outbox"
+	"orders.go/m/internal/event"
 	"orders.go/m/internal/models"
 	"orders.go/m/internal/repository/orders"
 	outbox2 "orders.go/m/internal/repository/outbox"
@@ -19,26 +20,29 @@ import (
 )
 
 type CreateOrderUseCase struct {
-	orderRepo  *orders.OrdersRepo
-	outboxRepo *outbox2.OutboxRepo
-	uow        *uow.UnitOfWork
+	orderRepo      *orders.OrdersRepo
+	outboxRepo     *outbox2.OutboxRepo
+	uow            *uow.UnitOfWork
+	eventPublisher event.EventPublisher
 }
 
 func NewCreateOrderUseCase(
 	orderRepo *orders.OrdersRepo,
 	uow *uow.UnitOfWork,
 	outboxRepo *outbox2.OutboxRepo,
+	eventPublisher event.EventPublisher,
 ) *CreateOrderUseCase {
 	return &CreateOrderUseCase{
-		orderRepo:  orderRepo,
-		uow:        uow,
-		outboxRepo: outboxRepo,
+		orderRepo:      orderRepo,
+		uow:            uow,
+		outboxRepo:     outboxRepo,
+		eventPublisher: eventPublisher,
 	}
 }
 
 type CreateOrderInput struct {
-	UserID      string  `json:"user_id"`
-	TotalAmount float64 `json:"total_amount"`
+	UserID      string  `json:"user_id" binding:"required"`
+	TotalAmount float64 `json:"total_amount" binding:"required"`
 }
 
 func (uc *CreateOrderUseCase) Execute(ctx context.Context, input CreateOrderInput) error {
@@ -66,7 +70,7 @@ func (uc *CreateOrderUseCase) Execute(ctx context.Context, input CreateOrderInpu
 		return errors.New("failed to unmarshal order")
 	}
 
-	return uc.uow.Do(ctx, func(tx *sql.Tx) error {
+	err = uc.uow.Do(ctx, func(tx *sql.Tx) (err error) {
 		if err := uc.orderRepo.Save(ctx, tx, order); err != nil {
 			return err
 		}
@@ -77,9 +81,18 @@ func (uc *CreateOrderUseCase) Execute(ctx context.Context, input CreateOrderInpu
 			AggregateID:   order.ID,
 			Type:          string(outbox.OutboxEventTypeOrderCreated),
 			Payload:       orderPayload,
-			SentAt:        null.TimeFrom(time.Now()),
+			SentAt:        null.TimeFromPtr(nil),
+			OccurredAt:    null.TimeFrom(time.Now()),
 		}
 
 		return uc.outboxRepo.Save(ctx, tx, event)
 	})
+
+	if err != nil {
+		log.Err(err).Msg("failed to save order")
+
+		return errors.New("failed to save order")
+	}
+
+	return nil
 }
