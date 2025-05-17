@@ -84,6 +84,7 @@ services:
       - "8082:8082"
     depends_on:
       - redpanda
+      - postgres
     environment:
       - KAFKA_BROKER=redpanda:9092
 

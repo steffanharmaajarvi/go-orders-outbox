@@ -10,7 +10,7 @@ RUN go mod download
 RUN apk add --no-cache git build-base
 
 COPY . ./
-COPY ./configs/.air.consumer.toml ./
+COPY ./configs/.air.consumer.toml ./.air.toml
 
 RUN go install github.com/cosmtrek/air@v1.45.0
 

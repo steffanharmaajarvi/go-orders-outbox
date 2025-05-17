@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	container, err := setup.BuildContainer()
+	container, err := setup.BuildConsumerContainer()
 	if err != nil {
 		panic(err)
 	}
