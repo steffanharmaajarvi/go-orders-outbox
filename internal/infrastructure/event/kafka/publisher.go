@@ -2,7 +2,6 @@ package kafka
 
 import (
 	"context"
-	"fmt"
 	"github.com/twmb/franz-go/pkg/kgo"
 	"log"
 	"time"
@@ -12,14 +11,12 @@ type KafkaPublisher struct {
 	client *kgo.Client
 }
 
-type KafkaConfig struct {
+type KafkaProducerConfig struct {
 	Host    string
 	GroupID string
 }
 
-func NewKafkaPublisher(cfg KafkaConfig) *KafkaPublisher {
-	fmt.Printf("%s %s", cfg.Host, cfg.GroupID)
-
+func NewKafkaPublisher(cfg KafkaProducerConfig) *KafkaPublisher {
 	client, err := kgo.NewClient(
 		kgo.SeedBrokers(cfg.Host),
 		kgo.ProducerLinger(100*time.Millisecond),

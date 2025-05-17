@@ -7,15 +7,13 @@ COPY go.mod ./
 COPY go.sum ./
 RUN go mod download
 
+RUN apk add --no-cache git build-base
+
 COPY . ./
+COPY ./configs/.air.consumer.toml ./
 
-RUN go build -o main ./cmd/consumer
+RUN go install github.com/cosmtrek/air@v1.45.0
 
-# Final stage
-FROM alpine:latest
-
-WORKDIR /root/
-COPY --from=builder /app/main .
 EXPOSE 8082
 
-CMD ["./main"]
+CMD ["air"]

@@ -6,6 +6,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/volatiletech/null/v8"
 	"orders.go/m/internal/infrastructure/event"
+	"orders.go/m/internal/infrastructure/event/common"
 	"orders.go/m/internal/models"
 	"orders.go/m/internal/repository/outbox"
 	"time"
@@ -55,6 +56,7 @@ func (o *OutboxDispatcher) Execute() error {
 			}
 		default:
 			log.Warn().Msg("worker pool full, skipping for now")
+			time.Sleep(time.Second * 5)
 		case <-ctx.Done():
 			return ctx.Err()
 		}
@@ -82,7 +84,7 @@ func (o *OutboxDispatcher) process(ctx context.Context, eventOutbox models.Outbo
 	ctx, cancel := context.WithTimeout(ctx, time.Second*10)
 	defer cancel()
 
-	topic, ok := event.AggregateTypeToTopic[eventOutbox.AggregateType]
+	topic, ok := common.AggregateTypeToTopic[eventOutbox.AggregateType]
 	if !ok {
 		return
 	}

@@ -36,7 +36,7 @@ func New() *App {
 	ordersRepo := orders.NewOrdersRepo(orderDb)
 	outboxRepo := outbox.NewOutboxRepo(orderDb)
 
-	eventPublisher := kafka.NewKafkaPublisher(kafka.KafkaConfig{
+	eventPublisher := kafka.NewKafkaPublisher(kafka.KafkaProducerConfig{
 		Host:    container.Config.GetString("kafka.host"),
 		GroupID: container.Config.GetString("kafka.group_id"),
 	})

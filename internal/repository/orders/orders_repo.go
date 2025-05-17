@@ -26,3 +26,17 @@ func (repo *OrdersRepo) Save(ctx context.Context, exec boil.ContextExecutor, ord
 
 	return nil
 }
+
+func (repo *OrdersRepo) GetOrderByID(ctx context.Context, exec boil.ContextExecutor, id string) (*models.Order, error) {
+	order, err := models.Orders(
+		models.OrderWhere.ID.EQ(id),
+	).One(ctx, exec)
+
+	if err != nil {
+		log.Err(err).Msg("failed to get order by id")
+
+		return nil, err
+	}
+
+	return order, nil
+}

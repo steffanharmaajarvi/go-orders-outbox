@@ -58,6 +58,7 @@ const (
 	OrderStatusShipped   string = "shipped"
 	OrderStatusCancelled string = "cancelled"
 	OrderStatusFailed    string = "failed"
+	OrderStatusConfirmed string = "confirmed"
 )
 
 func AllOrderStatus() []string {
@@ -67,5 +68,6 @@ func AllOrderStatus() []string {
 		OrderStatusShipped,
 		OrderStatusCancelled,
 		OrderStatusFailed,
+		OrderStatusConfirmed,
 	}
 }

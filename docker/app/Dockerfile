@@ -11,16 +11,6 @@ RUN apk add --no-cache git build-base
 
 COPY . ./
 COPY ./configs/.air.toml ./
-#
-#RUN go build -o main ./cmd/app
-#
-## Final stage
-#FROM alpine:latest
-#
-#WORKDIR /root/
-#
-#COPY --from=builder /app/main .
-#COPY ./configs/ ./
 
 RUN go install github.com/cosmtrek/air@v1.45.0
 
