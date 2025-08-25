@@ -47,10 +47,9 @@ kafka-logs/
 redpanda-data/
 
 # Output directories
-outbox/
 data/
 tmp/
-node_modules/  # (если добавится UI)
+node_modules/
 
 # Git
 *.orig

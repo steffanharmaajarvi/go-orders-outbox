@@ -55,19 +55,11 @@ func (uc *CreateOrderUseCase) Execute(ctx context.Context, input CreateOrderInpu
 		Status:      models.OrderStatusPending,
 	}
 
-	var result types.JSON
 	orderPayload, err := json.Marshal(order)
 	if err != nil {
 		log.Err(err).Msg("failed to marshal order")
 
 		return errors.New("failed to marshal order")
-	}
-
-	err = result.UnmarshalJSON(orderPayload)
-	if err != nil {
-		log.Err(err).Msg("failed to unmarshal order")
-
-		return errors.New("failed to unmarshal order")
 	}
 
 	err = uc.uow.Do(ctx, func(tx *sql.Tx) (err error) {
